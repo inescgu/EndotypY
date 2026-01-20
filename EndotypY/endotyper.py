@@ -108,7 +108,7 @@ class Endotyper:
         return self
 
 
-    def explore_seed_clusters(self, scaling=True, k=200):
+    def explore_seed_clusters(self, scaling=True, k=200, n_cores=1):
 
         """
         Run the seed clustering process.
@@ -118,6 +118,7 @@ class Endotyper:
         Args:
             - k_max: Maximum neighborhood size to test.
             - scaling: Whether to apply scaling to the RWR.
+            - n_cores: Number of cores to use in parallelizing.
 
         """
         # RUN RWR FOR EACH SEED GENE and save to not recompute if not needed
@@ -134,7 +135,8 @@ class Endotyper:
         self.seed_clusters = run_seed_clustering(self.network, 
                         self.seeds,
                         self.seed_clustering_neighborhoods,
-                        k_max=k)
+                        k_max=k,
+                        n_cores=n_cores)
 
         print(f"{len(self.seed_clusters)} Seed clusters identified")
         return self.seed_clusters
@@ -159,7 +161,7 @@ class Endotyper:
                                        self.idx_ensembl)
         
         self.disease_module, self.connected_subgraph = extract_connected_module(self.network, seeds,
-                                                           rwr_results, k=k, check_connectivity=True)
+                                                           rwr_results, k=k)
 
         print(f"Connected module extracted with {self.connected_subgraph.number_of_nodes()} nodes and {self.connected_subgraph.number_of_edges()} edges")
         return self
