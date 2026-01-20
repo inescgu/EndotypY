@@ -4,14 +4,14 @@ import networkx as nx
 from collections import defaultdict as dd
 import matplotlib.pyplot as plt #type: ignore
 from tqdm import tqdm #type: ignore
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool
 
 from EndotypY.rwr import extract_connected_module
 
 
 def run_seed_clustering(G, 
                         seed_genes,
-                        d_rwr_individuals, k_max=200):
+                        d_rwr_individuals, k_max=200, n_cores=1):
     """
     Run the seed clustering process.
     This function computes the RWR for each seed gene, clusters them based on
@@ -25,6 +25,7 @@ def run_seed_clustering(G,
         - scaling_matrix: Scaling matrix for the graph.
         - d_idx_ensembl: Dictionary mapping indices to Ensembl IDs.
         - k_max: Maximum neighborhood size to test.
+        - n_cores: Number of cores to use.
     """
     # CHECK IF THE SEED GENES ARE ALREADY CONNECTED, SKIP THE CLUSTERING IF SO
     subgraph_seeds = nx.subgraph(G, seed_genes)
@@ -49,13 +50,13 @@ def run_seed_clustering(G,
         if k_max not in tested_neighborhoods:
             tested_neighborhoods.append(k_max)
             
-    print(f"Testing neighborhood sizes in parallel on {cpu_count()} cores...")
+    print(f"Testing neighborhood sizes in parallel on {n_cores} cores...")
     
     # Prepare arguments for the parallel worker function
     args = [(G, seed_genes, d_rwr_individuals, k) for k in tested_neighborhoods]
 
     # Run the clustering in parallel
-    with Pool(processes=cpu_count()) as pool:
+    with Pool(processes=n_cores)) as pool:
         results = list(tqdm(pool.starmap(_cluster_seed_genes, args), total=len(tested_neighborhoods)))
 
     # Unpack the results from the parallel execution
