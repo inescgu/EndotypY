@@ -56,7 +56,7 @@ def run_seed_clustering(G,
     args = [(G, seed_genes, d_rwr_individuals, k) for k in tested_neighborhoods]
 
     # Run the clustering in parallel
-    with Pool(processes=n_cores)) as pool:
+    with Pool(processes=n_cores) as pool:
         results = list(tqdm(pool.starmap(_cluster_seed_genes, args), total=len(tested_neighborhoods)))
 
     # Unpack the results from the parallel execution
