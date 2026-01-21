@@ -11,7 +11,7 @@ from EndotypY.rwr import extract_connected_module
 
 def run_seed_clustering(G, 
                         seed_genes,
-                        d_rwr_individuals, k_max=200, n_cores=1):
+                        d_rwr_individuals, k_max=200, n_cores=6):
     """
     Run the seed clustering process.
     This function computes the RWR for each seed gene, clusters them based on
