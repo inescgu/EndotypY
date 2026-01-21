@@ -108,7 +108,7 @@ class Endotyper:
         return self
 
 
-    def explore_seed_clusters(self, scaling=True, k=200, n_cores=1):
+    def explore_seed_clusters(self, scaling=True, k=200, n_cores=6):
 
         """
         Run the seed clustering process.
